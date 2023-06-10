@@ -17,9 +17,9 @@ const getLogs = async (): Promise<ILogsResponse> => {
       range: "logs",
     });
     data = response.data as ILogsData;
-    console.log("data", data);
+    console.info("data", data);
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
     return { status: "error", data: null };
   }
 
@@ -46,7 +46,7 @@ const Home: NextPage = async () => {
         {response.status === "error" && <p>something went wrong ¯\_(ツ)_/¯</p>}
       </div>
       <button className="bg-neutral-900 hover:bg-neutral-950 text-xs font-bold py-2 px-4 rounded">
-        Up!
+        Manual up!
       </button>
     </main>
   );
