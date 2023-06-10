@@ -5,7 +5,7 @@ import { NextPage } from "next";
 
 const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
 
-const getData = async (): Promise<ILogsResponse> => {
+const getLogs = async (): Promise<ILogsResponse> => {
   const auth = getAuth();
   const sheets = google.sheets({ auth, version: "v4" });
 
@@ -20,20 +20,34 @@ const getData = async (): Promise<ILogsResponse> => {
     console.log("data", data);
   } catch (error) {
     console.log("error", error);
-    return { message: "error", data: null };
+    return { status: "error", data: null };
   }
 
-  return { message: "logs fetched", data };
+  return { status: "success", data };
 };
 
 const Home: NextPage = async () => {
-  const response = await getData();
+  const response = await getLogs();
+
+  const lastRow = response.data?.values.at(-1) ?? null;
+  const lastItem = lastRow ? lastRow[0] : null;
+
   return (
     <main className="flex flex-col items-center justify-center">
-      <h2 className="mb-3 text-2xl font-semibold">Hello World!</h2>
-      <pre className="text-[9px] whitespace-pre-wrap break-words">
-        {JSON.stringify(response, null, 2)}
-      </pre>
+      <div className="bg-neutral-950 p-2 rounded-md mb-5">
+        {response.status === "success" && (
+          <>
+            <h1 className="text-sm font-bold">Last up:</h1>
+            <p className="text-sm">
+              {lastItem ? new Date(lastItem).toString() : "[Not Found]"}
+            </p>
+          </>
+        )}
+        {response.status === "error" && <p>something went wrong ¯\_(ツ)_/¯</p>}
+      </div>
+      <button className="bg-neutral-900 hover:bg-neutral-950 text-xs font-bold py-2 px-4 rounded">
+        Up!
+      </button>
     </main>
   );
 };
