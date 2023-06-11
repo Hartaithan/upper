@@ -2,6 +2,7 @@ import { getAuth } from "@/helpers/auth";
 import { ILogsData, ILogsResponse } from "@/models/LogModel";
 import { google } from "googleapis";
 import { NextPage } from "next";
+import UpButton from "./Button";
 
 const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
 
@@ -45,9 +46,7 @@ const Home: NextPage = async () => {
         )}
         {response.status === "error" && <p>something went wrong ¯\_(ツ)_/¯</p>}
       </div>
-      <button className="bg-neutral-900 hover:bg-neutral-950 text-xs font-bold py-2 px-4 rounded">
-        Manual up!
-      </button>
+      <UpButton />
     </main>
   );
 };
