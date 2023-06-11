@@ -38,7 +38,7 @@ const createLog = async () => {
   const sheets = google.sheets({ auth, version: "v4" });
 
   try {
-    const response = await sheets.spreadsheets.values.append({
+    await sheets.spreadsheets.values.append({
       auth,
       spreadsheetId: SHEET_ID,
       range: "logs",
@@ -47,7 +47,25 @@ const createLog = async () => {
         values: [[new Date().toISOString()]],
       },
     });
-    console.log("response", response);
+  } catch (error) {
+    console.error("error", error);
+  }
+};
+
+const createNewTokens = async (access: string, refresh: string) => {
+  const auth = getAuth();
+  const sheets = google.sheets({ auth, version: "v4" });
+
+  try {
+    await sheets.spreadsheets.values.append({
+      auth,
+      spreadsheetId: SHEET_ID,
+      range: "tokens",
+      valueInputOption: "USER_ENTERED",
+      requestBody: {
+        values: [[new Date().toISOString(), access, refresh]],
+      },
+    });
   } catch (error) {
     console.error("error", error);
   }
@@ -94,6 +112,7 @@ export const GET = async () => {
     return NextResponse.json({ message: "Limit exceeded" }, { status: 400 });
   }
   if (errors.some((err) => err.value === "bad_authorization")) {
+    await createNewTokens("access", "refresh");
     return NextResponse.json({ message: "Need refresh" }, { status: 400 });
   }
 
