@@ -1,5 +1,6 @@
 "use client";
-import { useRouter } from "next/router";
+
+import { useRouter } from "next/navigation";
 import { FC } from "react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -18,7 +19,7 @@ const UpButton: FC = () => {
       alert(response);
       return;
     }
-    router.reload();
+    router.refresh();
   };
 
   return (
