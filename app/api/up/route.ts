@@ -1,13 +1,18 @@
 import { getAuth } from "@/helpers/auth";
 import { IError } from "@/models/ErrorModel";
-import { ITokenData } from "@/models/TokenModel";
+import { ILoginResponse, ITokenData } from "@/models/TokenModel";
 import { google } from "googleapis";
 import { NextResponse } from "next/server";
 
 const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
 const UP_URL = process.env.NEXT_PUBLIC_UP_URL;
+const LOGIN_URL = process.env.NEXT_PUBLIC_LOGIN_URL;
 const AGENT = process.env.NEXT_PUBLIC_AGENT ?? "";
 const HOST = process.env.NEXT_PUBLIC_HOST ?? "";
+const APP_ID = process.env.NEXT_PUBLIC_APP_ID ?? "";
+const CLIENT = process.env.NEXT_PUBLIC_CLIENT ?? "";
+const EMAIL = process.env.NEXT_PUBLIC_EMAIL ?? "";
+const PASSWORD = process.env.NEXT_PUBLIC_PASSWORD ?? "";
 
 export const baseHeaders = new Headers({
   "User-Agent": AGENT,
@@ -71,6 +76,34 @@ const createNewTokens = async (access: string, refresh: string) => {
   }
 };
 
+const retrieveNewTokens = async () => {
+  let response: ILoginResponse | null = null;
+  if (LOGIN_URL === undefined) {
+    return response;
+  }
+  const headers = { ...baseHeaders, Authorization: `Bearer ${CLIENT}` };
+
+  const formData = new FormData();
+  formData.append("app_id", APP_ID);
+  formData.append("app_version", "7.25");
+  formData.append("app_type", "applicant");
+  formData.append("platform", "android");
+  formData.append("platform_version", "8.0.0");
+  formData.append("grant_type", "password");
+  formData.append("login", EMAIL);
+  formData.append("password", PASSWORD);
+
+  const loginRequest = await fetch(LOGIN_URL, {
+    method: "POST",
+    headers,
+    body: formData,
+  });
+  if (!loginRequest.ok) return response;
+
+  response = await loginRequest.json();
+  return response;
+};
+
 export const GET = async () => {
   if (UP_URL === undefined) {
     return NextResponse.json(
@@ -112,8 +145,30 @@ export const GET = async () => {
     return NextResponse.json({ message: "Limit exceeded" }, { status: 400 });
   }
   if (errors.some((err) => err.value === "bad_authorization")) {
-    await createNewTokens("access", "refresh");
-    return NextResponse.json({ message: "Need refresh" }, { status: 400 });
+    const newTokens = await retrieveNewTokens();
+    if (!newTokens) {
+      return NextResponse.json(
+        { message: "Unable to get new session" },
+        { status: 400 }
+      );
+    }
+    await createNewTokens(newTokens.access_token, newTokens.refresh_token);
+
+    const headers = {
+      ...baseHeaders,
+      Authorization: `Bearer ${newTokens.access_token}`,
+    };
+    const upRequest = await fetch(UP_URL, { method: "POST", headers });
+
+    if (upRequest.ok) {
+      await createLog();
+      return NextResponse.json({ message: "Up completed!" }, { status: 200 });
+    }
+
+    return NextResponse.json(
+      { message: "Unable to refresh tokens" },
+      { status: 400 }
+    );
   }
 
   return NextResponse.json(
