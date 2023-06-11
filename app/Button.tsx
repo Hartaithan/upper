@@ -1,9 +1,12 @@
 "use client";
+import { useRouter } from "next/router";
 import { FC } from "react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const UpButton: FC = () => {
+  const router = useRouter();
+
   const manualUp = async () => {
     if (!API_URL) {
       alert("Unable to get ENV variables");
@@ -15,8 +18,7 @@ const UpButton: FC = () => {
       alert(response);
       return;
     }
-    const upResponse = upRequest.json();
-    console.log("upResponse", upResponse);
+    router.reload();
   };
 
   return (
