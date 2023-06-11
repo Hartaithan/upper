@@ -33,6 +33,26 @@ const getTokens = async (): Promise<ITokenData | null> => {
   return tokens;
 };
 
+const createLog = async () => {
+  const auth = getAuth();
+  const sheets = google.sheets({ auth, version: "v4" });
+
+  try {
+    const response = await sheets.spreadsheets.values.append({
+      auth,
+      spreadsheetId: SHEET_ID,
+      range: "logs",
+      valueInputOption: "USER_ENTERED",
+      requestBody: {
+        values: [[new Date().toISOString()]],
+      },
+    });
+    console.log("response", response);
+  } catch (error) {
+    console.error("error", error);
+  }
+};
+
 export const GET = async () => {
   if (UP_URL === undefined) {
     return NextResponse.json(
@@ -62,12 +82,13 @@ export const GET = async () => {
 
   const headers = { ...baseHeaders, Authorization: `Bearer ${access}` };
   const upRequest = await fetch(UP_URL, { method: "POST", headers });
-  const upResponse = await upRequest.json();
 
   if (upRequest.ok) {
+    await createLog();
     return NextResponse.json({ message: "Up completed!" }, { status: 200 });
   }
 
+  const upResponse = await upRequest.json();
   const errors: IError[] = upResponse.errors || [];
   if (errors.some((err) => err.value === "touch_limit_exceeded")) {
     return NextResponse.json({ message: "Limit exceeded" }, { status: 400 });
