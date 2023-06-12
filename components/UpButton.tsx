@@ -12,8 +12,9 @@ const UpButton: FC = () => {
       className="bg-neutral-900 hover:bg-neutral-950 text-xs font-bold py-2 px-4 rounded min-w-[6rem]"
       disabled={isPending}
       onClick={() => {
-        startTransition(() => {
-          manualUp();
+        startTransition(async () => {
+          const res = await manualUp();
+          alert(res);
         });
       }}
     >

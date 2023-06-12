@@ -6,14 +6,12 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const manualUp = async () => {
   if (!API_URL) {
-    console.error("Unable to get ENV variables");
-    return;
+    return "Unable to get ENV variables";
   }
   const upRequest = await fetch(API_URL + "/up");
   if (!upRequest.ok) {
-    const response = await upRequest.text();
-    console.error(response);
-    return;
+    const response = await upRequest.json();
+    return response?.message ?? "Something went wrong...";
   }
   revalidatePath("/");
 };
