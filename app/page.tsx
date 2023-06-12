@@ -36,7 +36,7 @@ const Home: NextPage = async () => {
   const lastItem = lastRow ? lastRow[0] : null;
 
   return (
-    <main className="flex flex-col items-center justify-center">
+    <main className="flex flex-col items-center justify-center p-5">
       <div className="bg-neutral-950 p-2 rounded-md mb-5">
         {response.status === "success" && (
           <>
