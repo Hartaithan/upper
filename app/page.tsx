@@ -1,8 +1,8 @@
+import UpButton from "@/components/UpButton";
 import { getAuth } from "@/helpers/auth";
 import { ILogsData, ILogsResponse } from "@/models/LogModel";
 import { google } from "googleapis";
 import { NextPage } from "next";
-import UpButton from "./Button";
 
 const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
 
