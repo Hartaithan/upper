@@ -6,6 +6,8 @@ import { NextPage } from "next";
 
 const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
 
+export const dynamic = "force-dynamic";
+
 const getLogs = async (): Promise<ILogsResponse> => {
   const auth = getAuth();
   const sheets = google.sheets({ auth, version: "v4" });
