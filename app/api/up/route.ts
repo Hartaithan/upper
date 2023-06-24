@@ -30,8 +30,7 @@ export const GET = async () => {
     );
   }
 
-  const [created_at, access, refresh] = lastTokenPair;
-  console.info("token:", new Date(created_at).toString(), access, refresh);
+  const [_created_at, access, _refresh] = lastTokenPair;
 
   const headers = { ...baseHeaders, Authorization: `Bearer ${access}` };
   const upRequest = await fetch(UP_URL, { method: "POST", headers });

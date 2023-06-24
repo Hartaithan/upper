@@ -18,6 +18,6 @@ export const createLog = async () => {
       },
     });
   } catch (error) {
-    console.error("error", error);
+    console.error("create log error", error);
   }
 };

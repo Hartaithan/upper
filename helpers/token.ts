@@ -23,7 +23,7 @@ export const getTokens = async (): Promise<ITokenData | null> => {
     });
     tokens = response.data as ITokenData;
   } catch (error) {
-    console.error("error", error);
+    console.error("get tokens error", error);
   }
 
   return tokens;
@@ -44,7 +44,7 @@ export const createNewTokens = async (access: string, refresh: string) => {
       },
     });
   } catch (error) {
-    console.error("error", error);
+    console.error("create new tokens error", error);
   }
 };
 

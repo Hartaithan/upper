@@ -20,9 +20,8 @@ const getLogs = async (): Promise<ILogsResponse> => {
       range: "logs",
     });
     data = response.data as ILogsData;
-    console.info("data", data);
   } catch (error) {
-    console.error("error", error);
+    console.error("get logs error", error);
     return { status: "error", data: null };
   }
 
