@@ -7,6 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "Upper",
   description: "Upper App",
+  icon: "/favicon.png",
 };
 
 interface Props {
