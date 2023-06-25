@@ -1,12 +1,13 @@
 import { saveNewTokens, getTokens, retrieveNewTokens } from "@/helpers/token";
 import { upRequest } from "@/helpers/up";
+import { UpResponse } from "@/models/UpModel";
 import { NextResponse } from "next/server";
 
-export const GET = async () => {
+export const GET = async (): Promise<NextResponse<UpResponse>> => {
   let tokens = await getTokens();
   if (tokens === null) {
     return NextResponse.json(
-      { message: "Unable to get tokens" },
+      { message: "Unable to get tokens", status: "tokens_not_found" },
       { status: 400 }
     );
   }
@@ -14,7 +15,10 @@ export const GET = async () => {
   const lastTokenPair = tokens.values.at(-1);
   if (!lastTokenPair) {
     return NextResponse.json(
-      { message: "Unable to get active pair of tokens" },
+      {
+        message: "Unable to get active pair of tokens",
+        status: "active_tokens_not_found",
+      },
       { status: 400 }
     );
   }
@@ -25,22 +29,28 @@ export const GET = async () => {
 
   if (upStatus === "env_not_found") {
     return NextResponse.json(
-      { message: "Unable to get env variables" },
+      { message: "Unable to get env variables", status: upStatus },
       { status: 400 }
     );
   }
 
   if (upStatus === "completed") {
-    return NextResponse.json({ message: "Up completed!" }, { status: 200 });
+    return NextResponse.json(
+      { message: "Up completed!", status: upStatus },
+      { status: 200 }
+    );
   }
 
   if (upStatus === "limit_exceeded") {
-    return NextResponse.json({ message: "Limit exceeded" }, { status: 400 });
+    return NextResponse.json(
+      { message: "Limit exceeded", status: upStatus },
+      { status: 400 }
+    );
   }
 
   if (upStatus === "unknown") {
     return NextResponse.json(
-      { message: "Something went wrong!" },
+      { message: "Something went wrong!", status: upStatus },
       { status: 400 }
     );
   }
@@ -48,7 +58,7 @@ export const GET = async () => {
   const newTokens = await retrieveNewTokens();
   if (!newTokens) {
     return NextResponse.json(
-      { message: "Unable to get new session" },
+      { message: "Unable to get new session", status: "new_session_error" },
       { status: 400 }
     );
   }
@@ -57,14 +67,14 @@ export const GET = async () => {
 
   if (upStatusRetry === "completed") {
     return NextResponse.json(
-      { message: "Up completed after refresh!" },
+      { message: "Up completed with new tokens!", status: upStatusRetry },
       { status: 200 }
     );
   }
 
   if (upStatusRetry === "limit_exceeded") {
     return NextResponse.json(
-      { message: "Limit exceeded after refresh" },
+      { message: "Limit exceeded with new tokens", status: upStatusRetry },
       { status: 400 }
     );
   }

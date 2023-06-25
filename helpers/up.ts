@@ -1,11 +1,11 @@
-import { UpResponseStatus } from "@/models/UpModel";
+import { UpRequestStatus } from "@/models/UpModel";
 import { baseHeaders } from "./headers";
 import { createLog } from "./logs";
 import { IError } from "@/models/ErrorModel";
 
 const UP_URL = process.env.NEXT_PUBLIC_SERVICE_UP_URL;
 
-export const upRequest = async (access: string): Promise<UpResponseStatus> => {
+export const upRequest = async (access: string): Promise<UpRequestStatus> => {
   if (UP_URL === undefined) {
     return "env_not_found";
   }
