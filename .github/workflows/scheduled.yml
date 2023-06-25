@@ -1,10 +1,10 @@
 name: Scheduled Up
 on:
   schedule:
-    - cron: "0 10/4 * * *"
+    - cron: "0 3/4 * * *"
 jobs:
   cron:
     runs-on: ubuntu-latest
     steps:
       - name: Scheduled Up
-        run: curl https://upper-hartaithan.netlify.app/api/up
+        run: curl https://upper-hartaithan.vercel.app/api/up
