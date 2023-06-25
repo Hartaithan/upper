@@ -3,8 +3,6 @@ import { upRequest } from "@/helpers/up";
 import { UpResponse } from "@/models/UpModel";
 import { NextResponse } from "next/server";
 
-export const runtime = "edge";
-
 export const GET = async (): Promise<NextResponse<UpResponse>> => {
   let tokens = await getTokens();
   if (tokens === null) {
