@@ -15,6 +15,7 @@ export const getTokens = async (): Promise<ITokenData | null> => {
   const sheets = google.sheets({ auth, version: "v4" });
 
   let tokens: ITokenData | null = null;
+  console.info("[GET_TOKENS]: request");
   try {
     const response = await sheets.spreadsheets.values.get({
       auth,
@@ -22,17 +23,19 @@ export const getTokens = async (): Promise<ITokenData | null> => {
       range: "tokens",
     });
     tokens = response.data as ITokenData;
+    console.info("[GET_TOKENS]: complete");
   } catch (error) {
-    console.error("get tokens error", error);
+    console.error("[GET_TOKENS]: error", error);
   }
 
   return tokens;
 };
 
-export const createNewTokens = async (access: string, refresh: string) => {
+export const saveNewTokens = async (access: string, refresh: string) => {
   const auth = getAuth();
   const sheets = google.sheets({ auth, version: "v4" });
 
+  console.info("[SAVE_TOKENS]: request");
   try {
     await sheets.spreadsheets.values.append({
       auth,
@@ -43,8 +46,9 @@ export const createNewTokens = async (access: string, refresh: string) => {
         values: [[new Date().toISOString(), access, refresh]],
       },
     });
+    console.info("[SAVE_TOKENS]: complete");
   } catch (error) {
-    console.error("create new tokens error", error);
+    console.error("[SAVE_TOKENS]: error", error);
   }
 };
 
@@ -65,13 +69,18 @@ export const retrieveNewTokens = async () => {
   formData.append("login", EMAIL);
   formData.append("password", PASSWORD);
 
+  console.info("[NEW_TOKENS]: request");
   const loginRequest = await fetch(LOGIN_URL, {
     method: "POST",
     headers,
     body: formData,
   });
-  if (!loginRequest.ok) return response;
+  if (!loginRequest.ok) {
+    console.info("[NEW_TOKENS]: error");
+    return response;
+  }
 
   response = await loginRequest.json();
+  console.info("[NEW_TOKENS]: complete");
   return response;
 };

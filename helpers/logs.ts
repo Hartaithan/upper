@@ -7,6 +7,7 @@ export const createLog = async () => {
   const auth = getAuth();
   const sheets = google.sheets({ auth, version: "v4" });
 
+  console.info("[CREATE_LOG]: request");
   try {
     await sheets.spreadsheets.values.append({
       auth,
@@ -17,7 +18,8 @@ export const createLog = async () => {
         values: [[new Date().toISOString()]],
       },
     });
+    console.info("[CREATE_LOG]: complete");
   } catch (error) {
-    console.error("create log error", error);
+    console.error("[CREATE_LOG]: error", error);
   }
 };
