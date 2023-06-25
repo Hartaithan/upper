@@ -3,12 +3,12 @@ import { getAuth } from "./auth";
 import { google } from "googleapis";
 import { baseHeaders } from "./headers";
 
-const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
-const LOGIN_URL = process.env.NEXT_PUBLIC_LOGIN_URL;
-const APP_ID = process.env.NEXT_PUBLIC_APP_ID ?? "";
-const CLIENT = process.env.NEXT_PUBLIC_CLIENT ?? "";
-const EMAIL = process.env.NEXT_PUBLIC_EMAIL ?? "";
-const PASSWORD = process.env.NEXT_PUBLIC_PASSWORD ?? "";
+const SHEET_ID = process.env.NEXT_PUBLIC_SHEETS_ID;
+const LOGIN_URL = process.env.NEXT_PUBLIC_SERVICE_LOGIN_URL;
+const APP_ID = process.env.NEXT_PUBLIC_SERVICE_APP_ID ?? "";
+const CLIENT = process.env.NEXT_PUBLIC_SERVICE_CLIENT ?? "";
+const EMAIL = process.env.NEXT_PUBLIC_SERVICE_EMAIL ?? "";
+const PASSWORD = process.env.NEXT_PUBLIC_SERVICE_PASSWORD ?? "";
 
 export const getTokens = async (): Promise<ITokenData | null> => {
   const auth = getAuth();

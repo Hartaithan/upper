@@ -4,7 +4,7 @@ import { createNewTokens, getTokens, retrieveNewTokens } from "@/helpers/token";
 import { IError } from "@/models/ErrorModel";
 import { NextResponse } from "next/server";
 
-const UP_URL = process.env.NEXT_PUBLIC_UP_URL;
+const UP_URL = process.env.NEXT_PUBLIC_SERVICE_UP_URL;
 
 export const GET = async () => {
   if (UP_URL === undefined) {

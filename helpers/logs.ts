@@ -1,7 +1,7 @@
 import { google } from "googleapis";
 import { getAuth } from "./auth";
 
-const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
+const SHEET_ID = process.env.NEXT_PUBLIC_SHEETS_ID;
 
 export const createLog = async () => {
   const auth = getAuth();

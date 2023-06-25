@@ -4,7 +4,7 @@ import { ILogsData, ILogsResponse } from "@/models/LogModel";
 import { google } from "googleapis";
 import { NextPage } from "next";
 
-const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
+const SHEET_ID = process.env.NEXT_PUBLIC_SHEETS_ID;
 
 export const dynamic = "force-dynamic";
 
