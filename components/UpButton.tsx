@@ -17,6 +17,7 @@ const UpButton: FC = () => {
         onClick={() => {
           startTransition(async () => {
             const res = await manualUp();
+            console.log("res", res);
             setMessage(res);
           });
         }}
