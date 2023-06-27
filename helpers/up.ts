@@ -15,7 +15,7 @@ export const upRequest = async (access: string): Promise<UpRequestStatus> => {
   const request = await fetch(UP_URL, { method: "POST", headers });
 
   if (request.ok) {
-    createLog();
+    await createLog();
     console.info("[UP]: completed");
     return "completed";
   }
