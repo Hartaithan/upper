@@ -5,6 +5,8 @@ import { IError } from "@/models/ErrorModel";
 
 const UP_URL = process.env.NEXT_PUBLIC_SERVICE_UP_URL;
 
+const tokenErrors: string[] = ["bad_authorization", "token_expired"];
+
 export const upRequest = async (access: string): Promise<UpRequestStatus> => {
   if (UP_URL === undefined) {
     return "env_not_found";
@@ -27,7 +29,7 @@ export const upRequest = async (access: string): Promise<UpRequestStatus> => {
     return "limit_exceeded";
   }
 
-  if (errors.some((err) => err.value === "bad_authorization")) {
+  if (errors.some((err) => tokenErrors.includes(err.value))) {
     console.info("[UP]: bad authorization");
     return "bad_authorization";
   }
