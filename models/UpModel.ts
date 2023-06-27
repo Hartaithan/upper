@@ -15,3 +15,8 @@ export interface UpResponse {
   message: string;
   status: UpResponseStatus;
 }
+
+export interface UpRequest {
+  status: UpRequestStatus;
+  response?: unknown;
+}

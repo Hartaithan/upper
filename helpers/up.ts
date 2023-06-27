@@ -1,4 +1,4 @@
-import { UpRequestStatus } from "@/models/UpModel";
+import { UpRequest } from "@/models/UpModel";
 import { baseHeaders } from "./headers";
 import { createLog } from "./logs";
 import { IError } from "@/models/ErrorModel";
@@ -7,9 +7,9 @@ const UP_URL = process.env.NEXT_PUBLIC_SERVICE_UP_URL;
 
 const tokenErrors: string[] = ["bad_authorization", "token_expired"];
 
-export const upRequest = async (access: string): Promise<UpRequestStatus> => {
+export const upRequest = async (access: string): Promise<UpRequest> => {
   if (UP_URL === undefined) {
-    return "env_not_found";
+    return { status: "env_not_found" };
   }
 
   const headers = { ...baseHeaders, Authorization: `Bearer ${access}` };
@@ -19,21 +19,21 @@ export const upRequest = async (access: string): Promise<UpRequestStatus> => {
   if (request.ok) {
     await createLog();
     console.info("[UP]: completed");
-    return "completed";
+    return { status: "completed" };
   }
 
   const response = await request.json();
   const errors: IError[] = response.errors || [];
   if (errors.some((err) => err.value === "touch_limit_exceeded")) {
     console.info("[UP]: limit exceeded");
-    return "limit_exceeded";
+    return { status: "limit_exceeded" };
   }
 
   if (errors.some((err) => tokenErrors.includes(err.value))) {
     console.info("[UP]: bad authorization");
-    return "bad_authorization";
+    return { status: "bad_authorization" };
   }
 
   console.error("[UP]: error", response);
-  return "unknown";
+  return { status: "unknown", response };
 };

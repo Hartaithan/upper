@@ -25,32 +25,36 @@ export const GET = async (): Promise<NextResponse<UpResponse>> => {
 
   const [_created_at, access, _refresh] = lastTokenPair;
 
-  const upStatus = await upRequest(access);
+  const up = await upRequest(access);
 
-  if (upStatus === "env_not_found") {
+  if (up.status === "env_not_found") {
     return NextResponse.json(
-      { message: "Unable to get env variables", status: upStatus },
+      { message: "Unable to get env variables", status: up.status },
       { status: 400 }
     );
   }
 
-  if (upStatus === "completed") {
+  if (up.status === "completed") {
     return NextResponse.json(
-      { message: "Up completed!", status: upStatus },
+      { message: "Up completed!", status: up.status },
       { status: 200 }
     );
   }
 
-  if (upStatus === "limit_exceeded") {
+  if (up.status === "limit_exceeded") {
     return NextResponse.json(
-      { message: "Limit exceeded", status: upStatus },
+      { message: "Limit exceeded", status: up.status },
       { status: 400 }
     );
   }
 
-  if (upStatus === "unknown") {
+  if (up.status === "unknown") {
     return NextResponse.json(
-      { message: "Something went wrong!", status: upStatus },
+      {
+        message: "Something went wrong!",
+        status: up.status,
+        response: up.response,
+      },
       { status: 400 }
     );
   }
@@ -63,24 +67,28 @@ export const GET = async (): Promise<NextResponse<UpResponse>> => {
     );
   }
   saveNewTokens(newTokens.access_token, newTokens.refresh_token);
-  const upStatusRetry = await upRequest(newTokens.access_token);
+  const upRetry = await upRequest(newTokens.access_token);
 
-  if (upStatusRetry === "completed") {
+  if (upRetry.status === "completed") {
     return NextResponse.json(
-      { message: "Up completed with new tokens!", status: upStatusRetry },
+      { message: "Up completed with new tokens!", status: upRetry.status },
       { status: 200 }
     );
   }
 
-  if (upStatusRetry === "limit_exceeded") {
+  if (upRetry.status === "limit_exceeded") {
     return NextResponse.json(
-      { message: "Limit exceeded with new tokens", status: upStatusRetry },
+      { message: "Limit exceeded with new tokens", status: upRetry.status },
       { status: 400 }
     );
   }
 
   return NextResponse.json(
-    { message: "Something went wrong!", status: upStatusRetry },
+    {
+      message: "Something went wrong!",
+      status: upRetry.status,
+      response: upRetry.response,
+    },
     { status: 400 }
   );
 };
