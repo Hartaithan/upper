@@ -1,7 +1,7 @@
 name: Scheduled Up
 on:
   schedule:
-    - cron: "*/270 * * * *"
+    - cron: "0 */5 * * *"
 jobs:
   cron:
     runs-on: ubuntu-latest
