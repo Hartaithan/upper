@@ -11,7 +11,7 @@ export const activityRequest = async (
 
   const url = ACTIVITY_URL + `&vacancy_id=${item_id}`;
   const headers = { ...baseHeaders, Authorization: `Bearer ${access}` };
-  const request = await fetch(url, { headers });
+  const request = await fetch(url, { headers, cache: "no-cache" });
   const response = await request.json();
 
   if (request.ok) {
