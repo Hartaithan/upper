@@ -9,23 +9,23 @@ export const activityRequest = async (
 ): Promise<ActivityRequest> => {
   if (ACTIVITY_URL === undefined) return { status: "env_not_found" };
 
-  console.info("[ACTIVITY]: request");
+  console.info("[ACTIVITY]: request, item_id: " + item_id);
   const url = ACTIVITY_URL + `&vacancy_id=${item_id}`;
   const headers = { ...baseHeaders, Authorization: `Bearer ${access}` };
   const request = await fetch(url, { headers });
   const response = await request.json();
 
   if (request.ok) {
-    console.info("[ACTIVITY]: completed");
+    console.info("[ACTIVITY]: completed, item_id: " + item_id);
     const activity: Activity = response;
     const score = activity.user_activity_score ?? null;
     const change = activity.user_activity_score_change ?? null;
     return {
       status: "completed",
-      message: `score: ${score}, change: ${change}`,
+      message: `item_id: ${item_id}, score: ${score}, change: ${change}`,
     };
   }
 
-  console.error("[ACTIVITY]: error", response);
+  console.error("[ACTIVITY]: error, item_id: " + item_id, response);
   return { status: "unknown" };
 };
