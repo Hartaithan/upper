@@ -17,3 +17,5 @@ export interface LoginResponse {
   refresh_token: string;
   expires_in: number;
 }
+
+export type TokenStatus = "tokens_not_found" | "active_tokens_not_found";
