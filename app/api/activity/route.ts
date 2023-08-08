@@ -44,10 +44,9 @@ export const GET = async (): Promise<NextResponse<ActivityResponse>> => {
   try {
     const responses = await Promise.allSettled(requests);
     const results: ActivityResult[] = responses.map((response) => {
-      if (response.status === "rejected")
-        return { message: "error", status: response.status };
+      if (response.status === "rejected") return { status: response.status };
       return {
-        message: response.value.message ?? "not_found",
+        ...response.value,
         status: response.status,
       };
     });

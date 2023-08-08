@@ -7,9 +7,8 @@ export const activityRequest = async (
   access: string,
   item_id: string
 ): Promise<ActivityRequest> => {
-  if (ACTIVITY_URL === undefined) return { status: "env_not_found" };
+  if (ACTIVITY_URL === undefined) return { status: "env_not_found", item_id };
 
-  console.info("[ACTIVITY]: request, item_id: " + item_id);
   const url = ACTIVITY_URL + `&vacancy_id=${item_id}`;
   const headers = { ...baseHeaders, Authorization: `Bearer ${access}` };
   const request = await fetch(url, { headers });
@@ -22,10 +21,12 @@ export const activityRequest = async (
     const change = activity.user_activity_score_change ?? null;
     return {
       status: "completed",
-      message: `item_id: ${item_id}, score: ${score}, change: ${change}`,
+      item_id,
+      score,
+      change,
     };
   }
 
   console.error("[ACTIVITY]: error, item_id: " + item_id, response);
-  return { status: "unknown" };
+  return { status: "unknown", item_id };
 };

@@ -15,11 +15,14 @@ export interface Activity {
 
 export interface ActivityRequest {
   status: ActivityRequestStatus | TokenStatus;
-  message?: string;
+  item_id: string;
+  score?: number;
+  change?: number;
 }
 
-export interface ActivityResult {
-  message: string;
+export interface ActivityResult
+  extends Omit<ActivityRequest, "status" | "item_id"> {
+  item_id?: string;
   status: string;
 }
 
