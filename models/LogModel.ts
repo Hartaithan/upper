@@ -1,12 +1,12 @@
-import { IData } from "./DataModel";
-import { IResponse } from "./ResponseModel";
+import { Data } from "./DataModel";
+import { Response } from "./ResponseModel";
 
-export type ILog = [string];
+export type Log = [string];
 
-export interface ILogsData extends IData {
-  values: ILog[];
+export interface LogsData extends Data {
+  values: Log[];
 }
 
-export interface ILogsResponse extends IResponse {
-  data: ILogsData | null;
+export interface LogsResponse extends Response {
+  data: LogsData | null;
 }

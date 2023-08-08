@@ -1,6 +1,6 @@
 import UpButton from "@/components/UpButton";
 import { getAuth } from "@/helpers/auth";
-import { ILogsData, ILogsResponse } from "@/models/LogModel";
+import { LogsData, LogsResponse } from "@/models/LogModel";
 import { google } from "googleapis";
 import { NextPage } from "next";
 
@@ -8,18 +8,18 @@ const SHEET_ID = process.env.NEXT_PUBLIC_SHEETS_ID;
 
 export const dynamic = "force-dynamic";
 
-const getLogs = async (): Promise<ILogsResponse> => {
+const getLogs = async (): Promise<LogsResponse> => {
   const auth = getAuth();
   const sheets = google.sheets({ auth, version: "v4" });
 
-  let data: ILogsData | null = null;
+  let data: LogsData | null = null;
   try {
     const response = await sheets.spreadsheets.values.get({
       auth,
       spreadsheetId: SHEET_ID,
       range: "logs",
     });
-    data = response.data as ILogsData;
+    data = response.data as LogsData;
   } catch (error) {
     console.error("get logs error", error);
     return { status: "error", data: null };

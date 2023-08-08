@@ -1,5 +1,5 @@
 export type Status = "success" | "error";
 
-export interface IResponse {
+export interface Response {
   status: Status;
 }

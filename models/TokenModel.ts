@@ -1,17 +1,17 @@
-import { IData } from "./DataModel";
-import { IResponse } from "./ResponseModel";
+import { Data } from "./DataModel";
+import { Response } from "./ResponseModel";
 
-export type IToken = [string, string, string];
+export type Token = [string, string, string];
 
-export interface ITokenData extends IData {
-  values: IToken[];
+export interface TokenData extends Data {
+  values: Token[];
 }
 
-export interface ITokenResponse extends IResponse {
-  data: ITokenData | null;
+export interface TokenResponse extends Response {
+  data: TokenData | null;
 }
 
-export interface ILoginResponse {
+export interface LoginResponse {
   access_token: string;
   token_type: string;
   refresh_token: string;

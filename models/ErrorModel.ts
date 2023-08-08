@@ -1,10 +1,10 @@
-export interface IError {
+export interface Error {
   value: string;
   type: string;
 }
 
-export interface IErrorResponse {
+export interface ErrorResponse {
   description: string;
-  errors: IError[];
+  errors: Error[];
   request_id: string;
 }

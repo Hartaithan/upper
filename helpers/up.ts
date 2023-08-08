@@ -1,7 +1,7 @@
 import { UpRequest } from "@/models/UpModel";
 import { baseHeaders } from "./headers";
 import { createLog } from "./logs";
-import { IError } from "@/models/ErrorModel";
+import { Error } from "@/models/ErrorModel";
 
 const UP_URL = process.env.NEXT_PUBLIC_SERVICE_UP_URL;
 
@@ -23,7 +23,7 @@ export const upRequest = async (access: string): Promise<UpRequest> => {
   }
 
   const response = await request.json();
-  const errors: IError[] = response.errors || [];
+  const errors: Error[] = response.errors || [];
   if (errors.some((err) => err.value === "touch_limit_exceeded")) {
     console.info("[UP]: limit exceeded");
     return { status: "limit_exceeded" };

@@ -2,12 +2,12 @@
 
 import { Dispatch, FC, SetStateAction } from "react";
 
-interface IToastProps {
+interface ToastProps {
   message: string;
   setMessage: Dispatch<SetStateAction<string | null>>;
 }
 
-const Toast: FC<IToastProps> = (props) => {
+const Toast: FC<ToastProps> = (props) => {
   const { message, setMessage } = props;
   return (
     <div

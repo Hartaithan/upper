@@ -1,4 +1,4 @@
-import { ILoginResponse, ITokenData } from "@/models/TokenModel";
+import { LoginResponse, TokenData } from "@/models/TokenModel";
 import { getAuth } from "./auth";
 import { google } from "googleapis";
 import { baseHeaders } from "./headers";
@@ -10,11 +10,11 @@ const CLIENT = process.env.NEXT_PUBLIC_SERVICE_CLIENT ?? "";
 const EMAIL = process.env.NEXT_PUBLIC_SERVICE_EMAIL ?? "";
 const PASSWORD = process.env.NEXT_PUBLIC_SERVICE_PASSWORD ?? "";
 
-export const getTokens = async (): Promise<ITokenData | null> => {
+export const getTokens = async (): Promise<TokenData | null> => {
   const auth = getAuth();
   const sheets = google.sheets({ auth, version: "v4" });
 
-  let tokens: ITokenData | null = null;
+  let tokens: TokenData | null = null;
   console.info("[GET_TOKENS]: request");
   try {
     const response = await sheets.spreadsheets.values.get({
@@ -22,7 +22,7 @@ export const getTokens = async (): Promise<ITokenData | null> => {
       spreadsheetId: SHEET_ID,
       range: "tokens",
     });
-    tokens = response.data as ITokenData;
+    tokens = response.data as TokenData;
     console.info("[GET_TOKENS]: complete");
   } catch (error) {
     console.error("[GET_TOKENS]: error", error);
@@ -53,7 +53,7 @@ export const saveNewTokens = async (access: string, refresh: string) => {
 };
 
 export const retrieveNewTokens = async () => {
-  let response: ILoginResponse | null = null;
+  let response: LoginResponse | null = null;
   if (LOGIN_URL === undefined) {
     return response;
   }
