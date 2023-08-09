@@ -56,7 +56,7 @@ export const GET = async (): Promise<NextResponse<ActivityResponse>> => {
         status: "completed",
         results,
       },
-      { status: 400 }
+      { status: 200 }
     );
   } catch (error) {
     return NextResponse.json(
