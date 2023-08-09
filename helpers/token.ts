@@ -74,6 +74,7 @@ export const retrieveNewTokens = async () => {
     method: "POST",
     headers,
     body: formData,
+    cache: "no-cache",
   });
   if (!loginRequest.ok) {
     console.info("[NEW_TOKENS]: error");

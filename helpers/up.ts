@@ -14,7 +14,11 @@ export const upRequest = async (access: string): Promise<UpRequest> => {
 
   const headers = { ...baseHeaders, Authorization: `Bearer ${access}` };
   console.info("[UP]: request");
-  const request = await fetch(UP_URL, { method: "POST", headers });
+  const request = await fetch(UP_URL, {
+    method: "POST",
+    headers,
+    cache: "no-cache",
+  });
 
   if (request.ok) {
     await createLog();

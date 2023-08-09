@@ -12,7 +12,7 @@ export const getItems = async (
 
   console.info("[ITEMS]: request");
   const url = ITEMS_URL + `&page=${page}&per_page=${per_page}&text=${query}`;
-  const request = await fetch(url, { headers: baseHeaders });
+  const request = await fetch(url, { headers: baseHeaders, cache: "no-cache" });
   const response = await request.json();
 
   const items: Item[] = response.items || [];
