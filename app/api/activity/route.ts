@@ -4,6 +4,8 @@ import { getTokens } from "@/helpers/token";
 import { ActivityResponse, ActivityResult } from "@/models/ActivityModel";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export const GET = async (): Promise<NextResponse<ActivityResponse>> => {
   const [tokensRes, itemsRes] = await Promise.allSettled([
     await getTokens(),
