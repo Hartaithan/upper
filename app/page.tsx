@@ -1,3 +1,4 @@
+import LastUp from "@/components/LastUp";
 import UpButton from "@/components/UpButton";
 import { getAuth } from "@/helpers/auth";
 import { LogsData, LogsResponse } from "@/models/LogModel";
@@ -37,14 +38,7 @@ const Home: NextPage = async () => {
   return (
     <main className="flex flex-col items-center justify-center p-5">
       <div className="bg-neutral-950 p-2 rounded-md mb-5">
-        {response.status === "success" && (
-          <>
-            <h1 className="text-sm font-bold">Last up:</h1>
-            <p className="text-sm">
-              {lastItem ? new Date(lastItem).toString() : "[Not Found]"}
-            </p>
-          </>
-        )}
+        {response.status === "success" && <LastUp date={lastItem} />}
         {response.status === "error" && <p>something went wrong ¯\_(ツ)_/¯</p>}
       </div>
       <UpButton />

@@ -9,6 +9,11 @@ interface ToastProps {
 
 const Toast: FC<ToastProps> = (props) => {
   const { message, setMessage } = props;
+
+  const handleClose = () => {
+    setMessage(null);
+  };
+
   return (
     <div
       id="toast-undo"
@@ -22,7 +27,7 @@ const Toast: FC<ToastProps> = (props) => {
           className="bg-neutral-950 text-white-400 hover:text-white-900 rounded hover:bg-neutral-900 inline-flex items-center justify-center h-8 w-8"
           data-dismiss-target="#toast-undo"
           aria-label="Close"
-          onClick={() => setMessage(null)}
+          onClick={handleClose}
         >
           <span className="sr-only">Close</span>
           <svg
