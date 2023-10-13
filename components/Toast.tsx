@@ -17,7 +17,7 @@ const Toast: FC<ToastProps> = (props) => {
   return (
     <div
       id="toast-undo"
-      className="fixed bottom-5 right-5 flex items-center w-full max-w-xs p-2 text-white-500 bg-neutral-950 rounded shadow"
+      className="fixed right-5 bottom-5 flex items-center w-full max-w-xs p-2 text-white-500 bg-neutral-950 rounded shadow"
       role="alert"
     >
       <div className="text-sm ml-2 font-normal">{message}</div>
