@@ -1,5 +1,6 @@
 import { google } from "googleapis";
 import { getAuth } from "./auth";
+import { Sheets } from "@/models/SheetModel";
 
 const SHEET_ID = process.env.NEXT_PUBLIC_SHEETS_ID;
 
@@ -9,14 +10,34 @@ export const createLog = async () => {
 
   console.info("[CREATE_LOG]: request");
   try {
-    await sheets.spreadsheets.values.append({
-      auth,
+    await sheets.spreadsheets.batchUpdate({
       spreadsheetId: SHEET_ID,
-      range: "logs",
-      valueInputOption: "USER_ENTERED",
       requestBody: {
-        values: [[new Date().toISOString()]],
+        requests: [
+          {
+            insertRange: {
+              range: {
+                sheetId: Sheets.Logs,
+                startRowIndex: 0,
+                endRowIndex: 1,
+              },
+              shiftDimension: "ROWS",
+            },
+          },
+          {
+            pasteData: {
+              data: new Date().toISOString(),
+              type: "PASTE_NORMAL",
+              delimiter: ",",
+              coordinate: {
+                sheetId: Sheets.Logs,
+                rowIndex: 0,
+              },
+            },
+          },
+        ],
       },
+      auth,
     });
     console.info("[CREATE_LOG]: complete");
   } catch (error) {
