@@ -10,3 +10,9 @@ export interface LogsData extends Data {
 export interface LogsResponse extends Response {
   data: LogsData | null;
 }
+
+export interface LastLog {
+  created_at: string;
+}
+
+export type LastLogResponse = LastLog | null;
