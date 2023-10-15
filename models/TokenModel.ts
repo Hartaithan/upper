@@ -19,3 +19,11 @@ export interface LoginResponse {
 }
 
 export type TokenStatus = "tokens_not_found" | "active_tokens_not_found";
+
+export interface ActiveTokens {
+  created_at: string;
+  access_token: string;
+  refresh_token: string;
+}
+
+export type ActiveTokensResponse = ActiveTokens | null;

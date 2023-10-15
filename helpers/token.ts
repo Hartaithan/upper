@@ -1,4 +1,8 @@
-import { LoginResponse, TokenData } from "@/models/TokenModel";
+import {
+  ActiveTokensResponse,
+  LoginResponse,
+  TokenData,
+} from "@/models/TokenModel";
 import { getAuth } from "./auth";
 import { google } from "googleapis";
 import { baseHeaders } from "./headers";
@@ -30,6 +34,31 @@ export const getTokens = async (): Promise<TokenData | null> => {
   }
 
   return tokens;
+};
+
+export const getActiveTokens = async (): Promise<ActiveTokensResponse> => {
+  const auth = getAuth();
+  const sheets = google.sheets({ auth, version: "v4" });
+
+  console.info("[GET_ACTIVE_TOKENS]: request");
+  try {
+    const response = await sheets.spreadsheets.values.get({
+      auth,
+      spreadsheetId: SHEET_ID,
+      range: "tokens!A1:C1",
+    });
+    const tokens = response.data as TokenData;
+    if (!tokens.values || tokens.values.length === 0) {
+      console.info("[GET_ACTIVE_TOKENS]: values not found");
+      return null;
+    }
+    const [created_at, access_token, refresh_token] = tokens.values[0];
+    console.info("[GET_ACTIVE_TOKENS]: complete");
+    return { created_at, access_token, refresh_token };
+  } catch (error) {
+    console.error("[GET_ACTIVE_TOKENS]: error", error);
+    return null;
+  }
 };
 
 export const saveNewTokens = async (access: string, refresh: string) => {

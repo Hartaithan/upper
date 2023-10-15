@@ -1,6 +1,6 @@
 import { activityRequest } from "@/helpers/activity";
 import { getItems } from "@/helpers/items";
-import { getTokens } from "@/helpers/token";
+import { getActiveTokens } from "@/helpers/token";
 import { ActivityResponse, ActivityResult } from "@/models/ActivityModel";
 import { NextResponse } from "next/server";
 
@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export const GET = async (): Promise<NextResponse<ActivityResponse>> => {
   const [tokensRes, itemsRes] = await Promise.allSettled([
-    await getTokens(),
+    await getActiveTokens(),
     await getItems(),
   ]);
 
@@ -26,19 +26,11 @@ export const GET = async (): Promise<NextResponse<ActivityResponse>> => {
     );
   }
 
-  const tokens = tokensRes.value;
-  const lastTokenPair = tokens.values.at(-1);
-  if (!lastTokenPair) {
-    return NextResponse.json(
-      {
-        message: "Unable to get active pair of tokens",
-        status: "active_tokens_not_found",
-      },
-      { status: 400 }
-    );
-  }
-
-  const [_created_at, access, _refresh] = lastTokenPair;
+  const {
+    created_at: _created_at,
+    access_token: access,
+    refresh_token: _refresh,
+  } = tokensRes.value;
 
   const items = itemsRes.value.items;
   const requests = items.map((i) => activityRequest(access, i.id));

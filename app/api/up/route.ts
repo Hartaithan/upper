@@ -1,4 +1,8 @@
-import { saveNewTokens, getTokens, retrieveNewTokens } from "@/helpers/token";
+import {
+  saveNewTokens,
+  retrieveNewTokens,
+  getActiveTokens,
+} from "@/helpers/token";
 import { upRequest } from "@/helpers/up";
 import { UpResponse } from "@/models/UpModel";
 import { NextResponse } from "next/server";
@@ -6,7 +10,7 @@ import { NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 export const GET = async (): Promise<NextResponse<UpResponse>> => {
-  let tokens = await getTokens();
+  const tokens = await getActiveTokens();
   if (tokens === null) {
     return NextResponse.json(
       { message: "Unable to get tokens", status: "tokens_not_found" },
@@ -14,18 +18,11 @@ export const GET = async (): Promise<NextResponse<UpResponse>> => {
     );
   }
 
-  const lastTokenPair = tokens.values.at(-1);
-  if (!lastTokenPair) {
-    return NextResponse.json(
-      {
-        message: "Unable to get active pair of tokens",
-        status: "active_tokens_not_found",
-      },
-      { status: 400 }
-    );
-  }
-
-  const [_created_at, access, _refresh] = lastTokenPair;
+  const {
+    created_at: _created_at,
+    access_token: access,
+    refresh_token: _refresh,
+  } = tokens;
 
   const up = await upRequest(access);
 
