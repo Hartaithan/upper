@@ -7,6 +7,7 @@ import { getAuth } from "./auth";
 import { google } from "googleapis";
 import { baseHeaders } from "./headers";
 import { Sheets } from "@/models/SheetModel";
+import { updatePayload } from "./update";
 
 const SHEET_ID = process.env.NEXT_PUBLIC_SHEETS_ID;
 const LOGIN_URL = process.env.NEXT_PUBLIC_SERVICE_LOGIN_URL;
@@ -67,32 +68,15 @@ export const saveNewTokens = async (access: string, refresh: string) => {
 
   console.info("[SAVE_TOKENS]: request");
   try {
+    const payload = updatePayload(Sheets.Tokens, [
+      new Date().toISOString(),
+      access,
+      refresh,
+    ]);
     await sheets.spreadsheets.batchUpdate({
       spreadsheetId: SHEET_ID,
       requestBody: {
-        requests: [
-          {
-            insertRange: {
-              range: {
-                sheetId: Sheets.Tokens,
-                startRowIndex: 0,
-                endRowIndex: 1,
-              },
-              shiftDimension: "ROWS",
-            },
-          },
-          {
-            pasteData: {
-              data: `${new Date().toISOString()}, ${access}, ${refresh}`,
-              type: "PASTE_NORMAL",
-              delimiter: ",",
-              coordinate: {
-                sheetId: Sheets.Tokens,
-                rowIndex: 0,
-              },
-            },
-          },
-        ],
+        requests: payload,
       },
       auth,
     });

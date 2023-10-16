@@ -2,6 +2,7 @@ import { google } from "googleapis";
 import { getAuth } from "./auth";
 import { Sheets } from "@/models/SheetModel";
 import { LastLogResponse, LogsData, LogsResponse } from "@/models/LogModel";
+import { updatePayload } from "./update";
 
 const SHEET_ID = process.env.NEXT_PUBLIC_SHEETS_ID;
 
@@ -11,32 +12,15 @@ export const createLog = async () => {
 
   console.info("[CREATE_LOG]: request");
   try {
+    const payload = updatePayload(Sheets.Logs, [
+      new Date().toISOString(),
+      "a",
+      "b",
+    ]);
     await sheets.spreadsheets.batchUpdate({
       spreadsheetId: SHEET_ID,
       requestBody: {
-        requests: [
-          {
-            insertRange: {
-              range: {
-                sheetId: Sheets.Logs,
-                startRowIndex: 0,
-                endRowIndex: 1,
-              },
-              shiftDimension: "ROWS",
-            },
-          },
-          {
-            pasteData: {
-              data: new Date().toISOString(),
-              type: "PASTE_NORMAL",
-              delimiter: ",",
-              coordinate: {
-                sheetId: Sheets.Logs,
-                rowIndex: 0,
-              },
-            },
-          },
-        ],
+        requests: payload,
       },
       auth,
     });
