@@ -7,4 +7,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Scheduled Up
-        run: curl https://upper-hartaithan.vercel.app/api/up
+        run: curl https://its-upper.vercel.app/api/up

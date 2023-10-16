@@ -12,11 +12,7 @@ export const createLog = async () => {
 
   console.info("[CREATE_LOG]: request");
   try {
-    const payload = updatePayload(Sheets.Logs, [
-      new Date().toISOString(),
-      "a",
-      "b",
-    ]);
+    const payload = updatePayload(Sheets.Logs, [new Date().toISOString()]);
     await sheets.spreadsheets.batchUpdate({
       spreadsheetId: SHEET_ID,
       requestBody: {
