@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { FC } from "react";
 
 interface LastUpProps {
@@ -18,4 +19,6 @@ const LastUp: FC<LastUpProps> = (props) => {
   );
 };
 
-export default LastUp;
+export default dynamic(() => Promise.resolve(LastUp), {
+  ssr: false,
+});
