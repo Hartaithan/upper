@@ -2,6 +2,7 @@ name: Scheduled Up
 on:
   schedule:
     - cron: "0 */5 * * *"
+  workflow_dispatch:
 jobs:
   cron:
     runs-on: ubuntu-latest

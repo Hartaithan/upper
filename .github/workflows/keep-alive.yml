@@ -2,6 +2,7 @@ name: Keep Alive
 on:
   schedule:
     - cron: "0 0 * * TUE"
+  workflow_dispatch:
 
 jobs:
   keepalive-job:
@@ -11,4 +12,4 @@ jobs:
       actions: write
     steps:
       - uses: actions/checkout@v4
-      - uses: gautamkrishnar/keepalive-workflow@v2
+      - uses: entepotenz/keep-github-actions-alive-min-dependencies@v1
